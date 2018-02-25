@@ -378,7 +378,7 @@ def blink(strip, color1, color2, color5, color6, wait_ms=50):
 data = json.loads(json.dumps([{'pattern': 'fade', 'color1': {'red': 16, 'green': 16, 'blue': 16}, 'color2': {'red': 16, 'green': 16, 'blue': 16}, 'color3': {'red': 16, 'green': 16, 'blue': 16}, 'color4': {'red': 16, 'green': 16, 'blue': 16}, 'color5': {'red': 16, 'green': 16, 'blue': 16}, 'color6': {'red': 16, 'green': 16, 'blue': 16}, 'wait': 10, 'width': 3, 'fading': 0, 'min': 50, 'max': 80}]), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 
 first = True
-start = 0
+#start = 0
 iteration = 0
 # Main program logic follows:
 if __name__ == '__main__':
@@ -402,24 +402,33 @@ if __name__ == '__main__':
 		if (change != lastChange or first):
                         try:
                                 data = json.load(open(CONF_PATH + 'light.conf'), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-                                print ('Changed:')
-                                for conf in data:
-			                print ('    ' + conf.pattern + ' c1=' + str(conf.color1) + ', c2=' + str(conf.color2) + ', c3=' + str(conf.color3) + ', c4=' + str(conf.color4) + ', c5=' + str(conf.color5) + ', c6=' + str(conf.color6) + ', wait=' + str(conf.wait) + 'ms, width=' + str(conf.width) + ', fading=' + str(conf.fading) + ', min=' + str(conf.min) + ', max=' + str(conf.max))
+                                print ('Changed: ' + str(len(data)) + ' items')
+                                #for c in data:
+                                #        print (' - ' + str(c))
+			        #        print ('    ' + c.pattern + ' c1=' + str(c.color1) + ', c2=' + str(c.color2) + ', c3=' + str(c.color3) + ', c4=' + str(c.color4) + ', c5=' + str(c.color5) + ', c6=' + str(c.color6) + ', wait=' + str(c.wait) + 'ms, width=' + str(c.width) + ', fading=' + str(c.fading) + ', min=' + str(c.min) + ', max=' + str(c.max))
 			        #			i = i + 1
 			        first = False
+                                iteration = 0
 			        lastChange = change
                         except ValueError:
                                 print ('Oops!  That was no valid JSON.  Try again...')
 
+                if (len(data) == 0):
+                        light(strip, Color(0,0,0), Color(0,0,0), Color(0,0,0), Color(0,0,0), 50)
+                        continue
 
-		index = start + (iteration % (len(data) - start))
+		index = iteration #start + (iteration % (len(data) - start))
                 conf = data[index]
 		if conf.pattern == 'clear':
-                        start = index + 1
-			print ('Cleared index=' + str(index) + ', length=' + str(len(data)) + ', start=' + str(start))
-			index = start + (iteration % (len(data) - start))
+                        for i in range(index + 1):
+                            data.pop(0)
+                        #start = index + 1
+			print ('Cleared index=' + str(index) + ', length=' + str(len(data)))# + ', start=' + str(start))
+			index = 0 #start + (iteration % (len(data) - start))
+                        conf = data[index]
 
-                #print ('Index: ' + str(start) + ' + (' + str(iteration) + ' % (' + str(len(data)) + ' - ' + str(start) + ') = ' + str(index))
+                #print ('Index: ' + str(start) + '+(' + str(iteration) + '%(' + str(len(data)) + '-' + str(start) + ')=' + str(index) + ': ' + conf.pattern + ' c1=' + str(conf.color1) + ', c2=' + str(conf.color2) + ', c3=' + str(conf.color3) + ', c4=' + str(conf.color4) + ', c5=' + str(conf.color5) + ', c6=' + str(conf.color6) + ', wait=' + str(conf.wait) + 'ms, width=' + str(conf.width) + ', fading=' + str(conf.fading) + ', min=' + str(conf.min) + ', max=' + str(conf.max))
+                print ('Index: ' + str(index) + '|' + str(iteration) + ': ' + conf.pattern + ' c1=' + str(conf.color1) + ', c2=' + str(conf.color2) + ', c3=' + str(conf.color3) + ', c4=' + str(conf.color4) + ', c5=' + str(conf.color5) + ', c6=' + str(conf.color6) + ', wait=' + str(conf.wait) + 'ms, width=' + str(conf.width) + ', fading=' + str(conf.fading) + ', min=' + str(conf.min) + ', max=' + str(conf.max))
 		if conf.pattern == 'wipe':
 			wipe(strip, Color2(conf.color1), Color2(conf.color2), Color2(conf.color5), Color2(conf.color6), conf.wait, conf.fading)
 		elif conf.pattern == 'light':
@@ -450,5 +459,7 @@ if __name__ == '__main__':
 			fade(strip, Color(16, 16, 16), Color(16, 16, 16), Color(0, 0, 0), Color(0, 0, 0), 10, 50, 80)
 			
 		iteration = iteration + 1
+                if (iteration >= len(data)):
+                        iteration = 0
 
         light(strip, Color(0, 0, 0), Color(0, 0, 0))
