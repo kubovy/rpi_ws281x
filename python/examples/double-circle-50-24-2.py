@@ -428,7 +428,7 @@ if __name__ == '__main__':
                         conf = data[index]
 
                 #print ('Index: ' + str(start) + '+(' + str(iteration) + '%(' + str(len(data)) + '-' + str(start) + ')=' + str(index) + ': ' + conf.pattern + ' c1=' + str(conf.color1) + ', c2=' + str(conf.color2) + ', c3=' + str(conf.color3) + ', c4=' + str(conf.color4) + ', c5=' + str(conf.color5) + ', c6=' + str(conf.color6) + ', wait=' + str(conf.wait) + 'ms, width=' + str(conf.width) + ', fading=' + str(conf.fading) + ', min=' + str(conf.min) + ', max=' + str(conf.max))
-                print ('Index: ' + str(index) + '|' + str(iteration) + ': ' + conf.pattern + ' c1=' + str(conf.color1) + ', c2=' + str(conf.color2) + ', c3=' + str(conf.color3) + ', c4=' + str(conf.color4) + ', c5=' + str(conf.color5) + ', c6=' + str(conf.color6) + ', wait=' + str(conf.wait) + 'ms, width=' + str(conf.width) + ', fading=' + str(conf.fading) + ', min=' + str(conf.min) + ', max=' + str(conf.max))
+                #print ('Index: ' + str(index) + '|' + str(iteration) + ': ' + conf.pattern + ' c1=' + str(conf.color1) + ', c2=' + str(conf.color2) + ', c3=' + str(conf.color3) + ', c4=' + str(conf.color4) + ', c5=' + str(conf.color5) + ', c6=' + str(conf.color6) + ', wait=' + str(conf.wait) + 'ms, width=' + str(conf.width) + ', fading=' + str(conf.fading) + ', min=' + str(conf.min) + ', max=' + str(conf.max))
 		if conf.pattern == 'wipe':
 			wipe(strip, Color2(conf.color1), Color2(conf.color2), Color2(conf.color5), Color2(conf.color6), conf.wait, conf.fading)
 		elif conf.pattern == 'light':
